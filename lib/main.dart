@@ -1,4 +1,4 @@
-import 'package:complimentsjar/pages/homePage.dart';
+import 'package:complimentsjar/pages/home_page.dart';
 import 'package:flutter/material.dart';
 main(){
   runApp(App());
@@ -10,7 +10,7 @@ class App extends StatelessWidget{
     return MaterialApp(
       title: "Compliment Jar",
       theme: ThemeData(scaffoldBackgroundColor: Colors.grey.shade100),
-      home: Homepage(),
+      home: HomePage(),
     ) ;
   }
 }
