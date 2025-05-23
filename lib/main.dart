@@ -13,8 +13,4 @@ class App extends StatelessWidget{
       home: HomePage(),
     ) ;
   }
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> 78b52a0a59815ff3ac582bbf224dbd500ff838c3
