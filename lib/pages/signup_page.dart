@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -142,3 +143,14 @@ class _SignupPageState extends State<SignupPage> {
     );
   }
 }
+=======
+import "package:flutter/material.dart";
+
+class SignupPage extends StatelessWidget {
+  const SignupPage({super.key});
+  @override
+  Widget build(BuildContext context) {
+    return Column(children: [Text("Signup Page")]);
+  }
+}
+>>>>>>> 78b52a0a59815ff3ac582bbf224dbd500ff838c3

@@ -1,5 +1,9 @@
 import 'package:complimentsjar/pages/about_page.dart';
+<<<<<<< HEAD
 import 'package:complimentsjar/pages/signup_page.dart';
+=======
+import './signup_page.dart';
+>>>>>>> 78b52a0a59815ff3ac582bbf224dbd500ff838c3
 import 'package:flutter/material.dart';
 
 // Reusable dropdown widget
@@ -67,7 +71,11 @@ class _HomePageState extends State<HomePage> {
     "Contact",
     "Login",
     "Sign Up",
+<<<<<<< HEAD
     "Compliments",
+=======
+    "Compliments"
+>>>>>>> 78b52a0a59815ff3ac582bbf224dbd500ff838c3
   ];
   String selectedMenu = "Home";
 
@@ -81,19 +89,30 @@ class _HomePageState extends State<HomePage> {
           style: const TextStyle(fontSize: 24, color: Colors.white),
         );
       case "Login":
+<<<<<<< HEAD
         return Text(
+=======
+       return Text(
+>>>>>>> 78b52a0a59815ff3ac582bbf224dbd500ff838c3
           "Login Page",
           style: const TextStyle(fontSize: 24, color: Colors.white),
         );
       case "Sign Up":
         return SignupPage();
       default:
+<<<<<<< HEAD
         return Center(
           child: Text(
             "Home Page",
             style: const TextStyle(fontSize: 24, color: Colors.white),
           ),
         );
+=======
+        return Center(child: Text(
+          "Home Page",
+          style: const TextStyle(fontSize: 24, color: Colors.white),
+        ));
+>>>>>>> 78b52a0a59815ff3ac582bbf224dbd500ff838c3
     }
   }
 
@@ -111,7 +130,10 @@ class _HomePageState extends State<HomePage> {
             color: Colors.white,
           ),
         ),
+<<<<<<< HEAD
 
+=======
+>>>>>>> 78b52a0a59815ff3ac582bbf224dbd500ff838c3
         actions: [
           Center(
             child: CustomDropdown(
@@ -132,4 +154,8 @@ class _HomePageState extends State<HomePage> {
 
 void main() {
   runApp(const MaterialApp(home: HomePage()));
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> 78b52a0a59815ff3ac582bbf224dbd500ff838c3
