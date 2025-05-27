@@ -1,31 +1,30 @@
-import 'package:complimentsjar/api/auth_service.dart';
+import 'package:complimentsjar/api/projects_service.dart';
 import 'package:complimentsjar/pages/main_layout.dart';
 import 'package:flutter/material.dart';
 
-
-class SignupPage extends StatefulWidget {
-  const SignupPage({super.key});
+class CreateProjectPage extends StatefulWidget {
+  const CreateProjectPage({super.key});
 
   @override
-  State<SignupPage> createState() => _SignupPageState();
+  State<CreateProjectPage> createState() => _CreateProjectPageState();
 }
 
-class _SignupPageState extends State<SignupPage> {
+class _CreateProjectPageState extends State<CreateProjectPage> {
   final _formKey = GlobalKey<FormState>();
   final _nameController = TextEditingController();
-  final _emailController = TextEditingController();
-  final _passwordController = TextEditingController();
-
+  final _descriptionController = TextEditingController();
+  final _statusController = TextEditingController();
+  final _userIdController = TextEditingController();
   bool _loading = false;
 
-  void _signupUser() async {
+  void _createProject() async {
     if (_formKey.currentState!.validate()) {
       setState(() => _loading = true);
-      final result = await AuthService.signup(
+      final result = await ProjectsService.createProject(
         _nameController.text,
-        _emailController.text,
-        _passwordController.text,
-        
+        _descriptionController.text,
+        _statusController.text,
+        _userIdController.text as int,
       );
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text(result), behavior: SnackBarBehavior.floating),
@@ -36,7 +35,7 @@ class _SignupPageState extends State<SignupPage> {
       // If signup is successful, navigate to login
       // if (result.toLowerCase().contains('success')) {
       Future.delayed(const Duration(milliseconds: 500), () {
-        Navigator.pushNamed(context, '/login');
+        Navigator.pushNamed(context, '/projects');
       });
     }
   }
@@ -56,7 +55,7 @@ class _SignupPageState extends State<SignupPage> {
             spacing: 12,
             children: [
               const Text(
-                "Sign Up Page",
+                "Create Project",
                 style: TextStyle(
                   fontSize: 24,
                   fontWeight: FontWeight.bold,
@@ -66,25 +65,33 @@ class _SignupPageState extends State<SignupPage> {
               TextFormField(
                 controller: _nameController,
                 decoration: const InputDecoration(
-                  labelText: "Full Name",
+                  labelText: "Name",
                   border: OutlineInputBorder(),
                 ),
                 validator: (value) => value!.isEmpty ? 'Name required' : null,
               ),
               TextFormField(
-                controller: _emailController,
+                controller: _descriptionController,
                 decoration: const InputDecoration(
-                  labelText: "Email",
+                  labelText: "Description",
                   border: OutlineInputBorder(),
                 ),
-                keyboardType: TextInputType.emailAddress,
-                validator: (value) => value!.isEmpty ? 'Email required' : null,
+                keyboardType: TextInputType.text,
+                validator:
+                    (value) => value!.isEmpty ? 'Description required' : null,
               ),
               TextFormField(
-                controller: _passwordController,
-                obscureText: true,
+                controller: _userIdController,
                 decoration: const InputDecoration(
-                  labelText: "Password",
+                  labelText: "User Id",
+                  border: OutlineInputBorder(),
+                ),
+                validator: null,
+              ),
+              TextFormField(
+                controller: _statusController,
+                decoration: const InputDecoration(
+                  labelText: "status",
                   border: OutlineInputBorder(),
                 ),
                 validator:
@@ -95,11 +102,11 @@ class _SignupPageState extends State<SignupPage> {
               SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(
-                  onPressed: _loading ? null : _signupUser,
+                  onPressed: _loading ? null : _createProject,
                   child:
                       _loading
                           ? const CircularProgressIndicator(color: Colors.white)
-                          : const Text("Sign Up"),
+                          : const Text("Create"),
                 ),
               ),
             ],
