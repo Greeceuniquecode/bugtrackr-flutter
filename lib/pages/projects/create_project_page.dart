@@ -1,5 +1,6 @@
 import 'package:complimentsjar/api/projects_service.dart';
 import 'package:complimentsjar/pages/main_layout.dart';
+import 'package:complimentsjar/widgets/custom_dropdown.dart';
 import 'package:flutter/material.dart';
 
 class CreateProjectPage extends StatefulWidget {
@@ -24,7 +25,7 @@ class _CreateProjectPageState extends State<CreateProjectPage> {
         _nameController.text,
         _descriptionController.text,
         _statusController.text,
-        _userIdController.text as int,
+        _userIdController.text,
       );
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text(result), behavior: SnackBarBehavior.floating),
@@ -34,7 +35,7 @@ class _CreateProjectPageState extends State<CreateProjectPage> {
 
       // If signup is successful, navigate to login
       // if (result.toLowerCase().contains('success')) {
-      Future.delayed(const Duration(milliseconds: 500), () {
+      Future.delayed(const Duration(milliseconds: 5000), () {
         Navigator.pushNamed(context, '/projects');
       });
     }
@@ -43,6 +44,7 @@ class _CreateProjectPageState extends State<CreateProjectPage> {
   @override
   Widget build(BuildContext context) {
     final deviceWidth = MediaQuery.sizeOf(context).width;
+    List<String> statusOptions = ['Active', 'Pending', 'Completed'];
 
     return MainLayout(
       child: Container(
@@ -88,15 +90,29 @@ class _CreateProjectPageState extends State<CreateProjectPage> {
                 ),
                 validator: null,
               ),
-              TextFormField(
-                controller: _statusController,
-                decoration: const InputDecoration(
-                  labelText: "status",
+              InputDecorator(
+                decoration: InputDecoration(
                   border: OutlineInputBorder(),
+                  contentPadding: EdgeInsets.symmetric(
+                    horizontal: 14,
+                    vertical: 4,
+                  ),
+                  labelText: 'Status',
                 ),
-                validator:
-                    (value) =>
-                        value!.length < 6 ? 'Minimum 6 characters' : null,
+                child: CustomDropdown(
+                  values: statusOptions,
+                  onSelected: (String value) {
+                    setState(() {
+                      _statusController.text = value;
+                    });
+                  },
+                  color: Colors.grey.shade700,
+                  backgroundColor: Colors.grey.shade100,
+                  textStyle: TextStyle(
+                    color: Colors.grey.shade700,
+                    fontSize: 17,
+                  ),
+                ),
               ),
               const SizedBox(height: 20),
               SizedBox(
