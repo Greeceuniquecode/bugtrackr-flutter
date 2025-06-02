@@ -4,8 +4,8 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 class BugsService {
-  static Future<Object?> getBugs() async {
-    final url = Uri.parse('http://10.0.2.2:8000/api/get-all-bugs');
+  static Future<Object?> getBugs(id) async {
+    final url = Uri.parse('http://10.0.2.2:8000/api/get-all-bugs/$id');
     try {
       final response = await http.get(
         url,

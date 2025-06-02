@@ -11,26 +11,65 @@ class ProjectDetailsPage extends StatelessWidget {
         ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
     return MainLayout(
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(project['name'] ?? " "),
-          Text(project['description'] ?? " "),
-          Container(height: 2,margin: EdgeInsets.symmetric(vertical: 12 ,horizontal: 0),color: Colors.blue.shade900,),
-          Container(
-            padding: EdgeInsets.symmetric(horizontal: 6,vertical: 0),
+          Padding(
+            padding: const EdgeInsets.all(12.0),
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text('Bugs'),
+                    Text(
+                      project['name'] ?? "Untitled Project",
+                      style: const TextStyle(
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
                     ElevatedButton(
-                      onPressed: () {},
-                      child: Text('Register Bug'),
+                      child: Text('Back'),
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
                     ),
                   ],
                 ),
-                BugsPage(),
+                const SizedBox(height: 8),
+                Text(
+                  project['description'] ?? "No description available",
+                  style: const TextStyle(fontSize: 16, color: Colors.grey),
+                ),
               ],
+            ),
+          ),
+          Container(
+            height: 2,
+            margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+            color: Colors.blue.shade900,
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                const Text(
+                  'Bugs',
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                ),
+                ElevatedButton(
+                  onPressed: () {Navigator.pushNamed(context,'/register-bug');},
+                  child: const Text('Register Bug'),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(height: 8),
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 12),
+              child: BugsPage(project['id']),
             ),
           ),
         ],
