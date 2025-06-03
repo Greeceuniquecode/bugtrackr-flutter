@@ -59,7 +59,7 @@ class ProjectDetailsPage extends StatelessWidget {
                   style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                 ),
                 ElevatedButton(
-                  onPressed: () {Navigator.pushNamed(context,'/register-bug');},
+                  onPressed: () {Navigator.pushNamed(context,'/register-bug', arguments: project);},
                   child: const Text('Register Bug'),
                 ),
               ],
