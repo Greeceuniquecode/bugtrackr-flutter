@@ -62,11 +62,10 @@ class _ProjectPageState extends State<ProjectPage> {
                   ),
                 ),
                 ElevatedButton(
-                  style: const ButtonStyle(
-                    backgroundColor: WidgetStatePropertyAll<Color>(
-                      Colors.green,
-                    ),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.green,
                   ),
+
                   onPressed: () {
                     Navigator.pushNamed(context, '/create-project');
                   },
@@ -104,18 +103,43 @@ class _ProjectPageState extends State<ProjectPage> {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              TextButton(
-                                onPressed: () {
-                                  Navigator.pushNamed(context, '/project-details',arguments: project);
-                                },
-                                child: Text(
-                                project['name'] ?? '',
-                                style: const TextStyle(
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.white,
-                                ),
-                                )
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  TextButton(
+                                    onPressed: () {
+                                      Navigator.pushNamed(
+                                        context,
+                                        '/project-details',
+                                        arguments: project,
+                                      );
+                                    },
+                                    child: Text(
+                                      project['name'] ?? '',
+                                      style: const TextStyle(
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                  ),
+                                  ElevatedButton(
+                                    style: ElevatedButton.styleFrom(
+                                      padding:
+                                          EdgeInsets
+                                              .zero, // Removes default padding
+                                    ),
+                                    onPressed: () {
+                                      Navigator.pushNamed(
+                                        context,
+                                        '/edit-project',
+                                        arguments: project,
+                                      );
+                                    },
+                                    child: Text('Edit', style: TextStyle(fontWeight: FontWeight.bold),),
+                                  ),
+                                ],
                               ),
                               const SizedBox(height: 4),
                               Text(

@@ -1,55 +1,63 @@
-import 'package:complimentsjar/api/bugs_service.dart';
+import 'package:complimentsjar/api/projects_service.dart';
 import 'package:complimentsjar/pages/main_layout.dart';
 import 'package:complimentsjar/widgets/custom_dropdown.dart';
 import 'package:flutter/material.dart';
-class RegisterBugPage extends StatefulWidget{
-  const RegisterBugPage({super.key});
 
-    @override
-  State<RegisterBugPage> createState() => _RegisterBugPageState();
+class EditProjectPage extends StatefulWidget {
+  const EditProjectPage({super.key});
+
+  @override
+  State<EditProjectPage> createState() => _EditProjectPageState();
 }
 
-class _RegisterBugPageState extends State<RegisterBugPage> {
+class _EditProjectPageState extends State<EditProjectPage> {
   final _formKey = GlobalKey<FormState>();
-  final _titleController = TextEditingController();
-  final _descriptionController = TextEditingController();
-  final _codeController = TextEditingController();
-  final _userIdController = TextEditingController();
-  final _statusController =TextEditingController();
-  final _projectIdController = TextEditingController();
   bool _loading = false;
+  late TextEditingController _nameController;
+  late TextEditingController _descriptionController;
+  late TextEditingController _statusController;
+  late TextEditingController _userIdController;
 
-  void _registerBug() async {
-    final project = ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
+  Map<String, dynamic>? project;
 
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    project ??=
+        ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
+
+    _nameController = TextEditingController(text: project!['name']);
+    _descriptionController = TextEditingController(
+      text: project!['description'],
+    );
+    _statusController = TextEditingController(text: project!['status']);
+_userIdController = TextEditingController(text: project!['user_id'].toString());
+  }
+
+  void _editProject() async {
     if (_formKey.currentState!.validate()) {
       setState(() => _loading = true);
-      final result = await BugsService.registerBug(
-        _titleController.text,
+
+      final result = await ProjectsService.editProject(
+        _nameController.text,
         _descriptionController.text,
-        _codeController.text,
+        _statusController.text,
         _userIdController.text,
-          _statusController.text,
-          _projectIdController.text,
+        project!['id'],
       );
+
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("Success"), behavior: SnackBarBehavior.floating),
+        SnackBar(content: Text(result), behavior: SnackBarBehavior.floating),
       );
 
       setState(() => _loading = false);
-
-      // If signup is successful, navigate to login
-      // if (result.toLowerCase().contains('success')) {
-      Future.delayed(const Duration(milliseconds: 5000), () {
-        Navigator.pushNamed(context, '/projects');
-      });
     }
   }
 
   @override
   Widget build(BuildContext context) {
     final deviceWidth = MediaQuery.sizeOf(context).width;
-        List<String> statusOptions = ['Active', 'Pending', 'Completed'];
+    List<String> statusOptions = ['Active', 'Pending', 'Completed'];
 
     return MainLayout(
       child: Container(
@@ -59,10 +67,10 @@ class _RegisterBugPageState extends State<RegisterBugPage> {
         child: Form(
           key: _formKey,
           child: Column(
-            spacing: 6,
+            spacing: 12,
             children: [
               const Text(
-                "Register Bug Page",
+                "Edit Project",
                 style: TextStyle(
                   fontSize: 24,
                   fontWeight: FontWeight.bold,
@@ -70,21 +78,12 @@ class _RegisterBugPageState extends State<RegisterBugPage> {
                 ),
               ),
               TextFormField(
-                controller: _titleController,
+                controller: _nameController,
                 decoration: const InputDecoration(
-                  labelText: "Title",
+                  labelText: "Name",
                   border: OutlineInputBorder(),
                 ),
-                validator: (value) => value!.isEmpty ? 'Title required' : null,
-              ),
-              TextFormField(
-                controller: _codeController,
-                decoration: const InputDecoration(
-                  labelText: "Code",
-                  border: OutlineInputBorder(),
-                ),
-                keyboardType: TextInputType.emailAddress,
-                validator: (value) => value!.isEmpty ? 'Code required' : null,
+                validator: (value) => value!.isEmpty ? 'Name required' : null,
               ),
               TextFormField(
                 controller: _descriptionController,
@@ -92,8 +91,19 @@ class _RegisterBugPageState extends State<RegisterBugPage> {
                   labelText: "Description",
                   border: OutlineInputBorder(),
                 ),
+                keyboardType: TextInputType.text,
+                validator:
+                    (value) => value!.isEmpty ? 'Description required' : null,
               ),
-                            InputDecorator(
+              TextFormField(
+                controller: _userIdController,
+                decoration: const InputDecoration(
+                  labelText: "User Id",
+                  border: OutlineInputBorder(),
+                ),
+                validator: null,
+              ),
+              InputDecorator(
                 decoration: InputDecoration(
                   border: OutlineInputBorder(),
                   contentPadding: EdgeInsets.symmetric(
@@ -117,29 +127,15 @@ class _RegisterBugPageState extends State<RegisterBugPage> {
                   ),
                 ),
               ),
-              TextFormField(
-                controller: _userIdController,
-                decoration: const InputDecoration(
-                  labelText: "User Id",
-                  border: OutlineInputBorder(),
-                ),
-              ),
-                            TextFormField(
-                controller: _projectIdController,
-                decoration: const InputDecoration(
-                  labelText: "Project Id",
-                  border: OutlineInputBorder(),
-                ),
-              ),
-              const SizedBox(height: 6),
+              const SizedBox(height: 20),
               SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(
-                  onPressed: _loading ? null : _registerBug,
+                  onPressed: _loading ? null : _editProject,
                   child:
                       _loading
                           ? const CircularProgressIndicator(color: Colors.white)
-                          : const Text("Register"),
+                          : const Text("Edit"),
                 ),
               ),
             ],

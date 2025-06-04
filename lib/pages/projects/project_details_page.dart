@@ -1,5 +1,5 @@
 import 'package:complimentsjar/pages/main_layout.dart';
-import 'package:complimentsjar/pages/projects/bugs/bugs_page.dart';
+import 'package:complimentsjar/pages/bugs/bugs_page.dart';
 import 'package:flutter/material.dart';
 
 class ProjectDetailsPage extends StatelessWidget {

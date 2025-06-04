@@ -2,9 +2,10 @@ import 'package:complimentsjar/pages/about_page.dart';
 import 'package:complimentsjar/pages/dashboard_page.dart';
 import 'package:complimentsjar/pages/home_page.dart';
 import 'package:complimentsjar/pages/login_page.dart';
-import 'package:complimentsjar/pages/projects/bugs/bug_details_page.dart';
-import 'package:complimentsjar/pages/projects/bugs/register_bug_page.dart';
+import 'package:complimentsjar/pages/bugs/bug_details_page.dart';
+import 'package:complimentsjar/pages/bugs/register_bug_page.dart';
 import 'package:complimentsjar/pages/projects/create_project_page.dart';
+import 'package:complimentsjar/pages/projects/edit_project_page.dart';
 import 'package:complimentsjar/pages/projects/project_details_page.dart';
 import 'package:complimentsjar/pages/projects/project_page.dart';
 import 'package:complimentsjar/pages/signup_page.dart';
@@ -21,5 +22,6 @@ final Map<String, WidgetBuilder> appRoutes = {
   '/project-details':(context)=>ProjectDetailsPage(),
   '/bug-details':(context)=>BugDetailsPage(),
   '/register-bug':(context)=>RegisterBugPage(),
+  '/edit-project':(context)=>EditProjectPage(),
   // Add more routes as needed
 };

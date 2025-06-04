@@ -57,4 +57,40 @@ class ProjectsService {
       return 'Error: $e';
     }
   }
+  static Future<String> editProject(
+    String name,
+    String description,
+    String status,
+    String userId,
+    String id,
+  ) async {
+    final url = Uri.parse('http://10.0.2.2:8000/api/edit-project');
+    try {
+      final response = await http.post(
+        url,
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+        },
+        body: jsonEncode({
+          'id':id,
+          'name': name,
+          'description': description,
+          'status': status,
+          'user_id': userId,
+        }),
+      );
+
+      final data = jsonDecode(response.body);
+
+      if (response.statusCode == 200) {
+        return 'Project edited successfully!';
+      } else {
+        return data['message'] ?? 'Project edit failed';
+      }
+    } catch (e) {
+      return 'Error: $e';
+    }
+  }
+
 }
