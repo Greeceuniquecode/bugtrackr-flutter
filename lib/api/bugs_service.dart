@@ -61,4 +61,42 @@ class BugsService {
       return 'Error: $e';
     }
   }
+  static Future<String> editBug(
+    final String title,
+    final String code,
+    final String description,
+    final String status,
+    final String userId,
+    final String projectId,
+    final int bugId,
+  ) async {
+    final url = Uri.parse('http://10.0.2.2:8000/api/edit-bug/$bugId');
+    try {
+      final response = await http.put(
+        url,
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+        },
+        body: jsonEncode({
+          "title": title,
+          "code": code,
+          "description": description,
+          "status": status,
+          "user_id": userId,
+          "project_id": projectId,
+        }),
+      );
+      final data = jsonDecode(response.body);
+
+      if (response.statusCode == 200) {
+        return 'Bug updated successfully!';
+      } else {
+        return data['message'] ?? 'Failed to update bug';
+      }
+    } catch (e) {
+      return 'Error: $e';
+    }
+  }
 }
+

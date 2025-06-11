@@ -1,63 +1,75 @@
-import 'package:complimentsjar/api/projects_service.dart';
+import 'package:complimentsjar/api/bugs_service.dart';
 import 'package:complimentsjar/pages/main_layout.dart';
 import 'package:complimentsjar/widgets/custom_dropdown.dart';
 import 'package:flutter/material.dart';
 
-class EditProjectPage extends StatefulWidget {
-  const EditProjectPage({super.key});
+class BugEditPage extends StatefulWidget {
+  const BugEditPage({super.key});
 
   @override
-  State<EditProjectPage> createState() => _EditProjectPageState();
+  State<BugEditPage> createState() => _BugEditPageState();
 }
 
-class _EditProjectPageState extends State<EditProjectPage> {
+class _BugEditPageState extends State<BugEditPage> {
   final _formKey = GlobalKey<FormState>();
   bool _loading = false;
 
-  late TextEditingController _nameController;
-  late TextEditingController _descriptionController;
-  late TextEditingController _statusController;
-  late TextEditingController _userIdController;
+  late TextEditingController _titleController = TextEditingController();
+  late TextEditingController _codeController = TextEditingController();
+  late TextEditingController _descriptionController = TextEditingController();
+  late TextEditingController _statusController = TextEditingController();
+  late TextEditingController _userIdController = TextEditingController();
+  late TextEditingController _projectIdController = TextEditingController();
 
-  Map<String, dynamic>? project;
-  late Key dropdownKey;
+  Map<String, dynamic>? bug;
+  Key? dropdownKey;
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
 
-    if (project == null) {
-      project = ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
+    final args = ModalRoute.of(context)?.settings.arguments;
+    if (bug == null && args != null && args is Map<String, dynamic>) {
+      bug = args;
 
-      _nameController = TextEditingController(text: project!['name']);
-      _descriptionController = TextEditingController(text: project!['description']);
-      _statusController = TextEditingController(text: project!['status']);
-      _userIdController = TextEditingController(text: project!['user_id'].toString());
+      _titleController = TextEditingController(text: bug!['title']);
+      _codeController = TextEditingController(text: bug!['code']);
+      _descriptionController = TextEditingController(text: bug!['description']);
+      _statusController = TextEditingController(text: bug!['status']);
+      _userIdController = TextEditingController(
+        text: bug!['user_id'].toString(),
+      );
+      _projectIdController = TextEditingController(
+        text: bug!['project_id'].toString(),
+      );
 
-      // Use a ValueKey based on initial status to rebuild dropdown with correct initial selection
-      dropdownKey = ValueKey(project!['status']);
+      dropdownKey = ValueKey(bug!['status']);
     }
   }
 
   @override
   void dispose() {
-    _nameController.dispose();
+    _titleController.dispose();
+    _codeController.dispose();
     _descriptionController.dispose();
     _statusController.dispose();
     _userIdController.dispose();
+    _projectIdController.dispose();
     super.dispose();
   }
 
-  void _editProject() async {
+  void _editBug() async {
     if (_formKey.currentState!.validate()) {
       setState(() => _loading = true);
 
-      final result = await ProjectsService.editProject(
-        _nameController.text,
+      final result = await BugsService.editBug(
+        _titleController.text,
+        _codeController.text,
         _descriptionController.text,
         _statusController.text,
-        _userIdController.text,
-        project!['id'],
+        bug!['user_id'],
+        bug!['project_id'],
+        bug!['id'],
       );
 
       ScaffoldMessenger.of(context).showSnackBar(
@@ -84,7 +96,7 @@ class _EditProjectPageState extends State<EditProjectPage> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const Text(
-                "Edit Project",
+                "Edit Bug",
                 style: TextStyle(
                   fontSize: 24,
                   fontWeight: FontWeight.bold,
@@ -93,12 +105,23 @@ class _EditProjectPageState extends State<EditProjectPage> {
               ),
               const SizedBox(height: 12),
               TextFormField(
-                controller: _nameController,
+                controller: _titleController,
                 decoration: const InputDecoration(
-                  labelText: "Name",
+                  labelText: "Bug Title",
                   border: OutlineInputBorder(),
                 ),
-                validator: (value) => value!.isEmpty ? 'Name required' : null,
+                validator:
+                    (value) => value!.isEmpty ? 'Bug title required' : null,
+              ),
+              const SizedBox(height: 12),
+              TextFormField(
+                controller: _codeController,
+                decoration: const InputDecoration(
+                  labelText: "Code",
+                  border: OutlineInputBorder(),
+                ),
+                keyboardType: TextInputType.text,
+                validator: (value) => value!.isEmpty ? 'Code required' : null,
               ),
               const SizedBox(height: 12),
               TextFormField(
@@ -108,21 +131,17 @@ class _EditProjectPageState extends State<EditProjectPage> {
                   border: OutlineInputBorder(),
                 ),
                 keyboardType: TextInputType.text,
-                validator: (value) => value!.isEmpty ? 'Description required' : null,
-              ),
-              const SizedBox(height: 12),
-              TextFormField(
-                controller: _userIdController,
-                decoration: const InputDecoration(
-                  labelText: "User Id",
-                  border: OutlineInputBorder(),
-                ),
+                validator:
+                    (value) => value!.isEmpty ? 'Description required' : null,
               ),
               const SizedBox(height: 12),
               InputDecorator(
                 decoration: InputDecoration(
                   border: OutlineInputBorder(),
-                  contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 4),
+                  contentPadding: const EdgeInsets.symmetric(
+                    horizontal: 14,
+                    vertical: 4,
+                  ),
                   labelText: 'Status',
                 ),
                 child: CustomDropdown(
@@ -130,7 +149,8 @@ class _EditProjectPageState extends State<EditProjectPage> {
                   values: statusOptions,
                   onSelected: (String value) {
                     setState(() {
-                      _statusController.text = value; // update controller text on selection
+                      _statusController.text =
+                          value; // update controller text on selection
                     });
                   },
                   color: Colors.grey.shade700,
@@ -145,10 +165,11 @@ class _EditProjectPageState extends State<EditProjectPage> {
               SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(
-                  onPressed: _loading ? null : _editProject,
-                  child: _loading
-                      ? const CircularProgressIndicator(color: Colors.white)
-                      : const Text("Edit"),
+                  onPressed: _loading ? null : _editBug,
+                  child:
+                      _loading
+                          ? const CircularProgressIndicator(color: Colors.white)
+                          : const Text("Edit Bug"),
                 ),
               ),
             ],

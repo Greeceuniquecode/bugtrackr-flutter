@@ -293,11 +293,8 @@ class BugDetailsPage extends StatelessWidget {
                   child: OutlinedButton.icon(
                     onPressed: () {
                       // Add edit functionality
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          content: Text('Edit functionality to be implemented'),
-                        ),
-                      );
+             Navigator.pushNamed(context, '/edit-bug', arguments: bug);
+                   
                     },
                     icon: const Icon(Icons.edit),
                     label: const Text('Edit Bug'),

@@ -1,18 +1,39 @@
+import 'package:complimentsjar/api/auth_service.dart';
 import 'package:complimentsjar/widgets/custom_dropdown.dart';
 import 'package:flutter/material.dart';
-class MainLayout extends StatelessWidget {
+
+class MainLayout extends StatefulWidget {
   final Widget child;
 
   const MainLayout({super.key, required this.child});
 
-  static const List<String> menuItems = [
-    "Home",
-    "About",
-    "Contact",
-    "Login",
-    "Sign Up",
-    "Projects",
-  ];
+  @override
+  State<MainLayout> createState() => _MainLayoutState();
+}
+
+class _MainLayoutState extends State<MainLayout> {
+  String? email;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadLoginInfo();
+  }
+
+  Future<void> _loadLoginInfo() async {
+    final storedEmail = await AuthService.getLoginInfo();
+    setState(() {
+      email = storedEmail;
+    });
+  }
+
+  List<String> get menuItems {
+    if (email == null) {
+      return ["Home", "About", "Contact", "Login", "Sign Up"];
+    } else {
+      return ["Home", "About", "Contact", "Projects", "Logout"];
+    }
+  }
 
   void _navigate(BuildContext context, String value) {
     switch (value) {
@@ -33,8 +54,11 @@ class MainLayout extends StatelessWidget {
       case "Sign Up":
         Navigator.pushNamed(context, '/signup');
         break;
-        case "Projects":
+      case "Projects":
         Navigator.pushNamed(context, '/projects');
+        break;
+      case "Logout":
+        Navigator.pushNamed(context, '/logout');
         break;
     }
   }
@@ -44,7 +68,7 @@ class MainLayout extends StatelessWidget {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-         automaticallyImplyLeading: false, // 🔺 This removes the back arrow
+        automaticallyImplyLeading: false,
         backgroundColor: Colors.blue.shade800,
         title: const Text(
           "BugTrackr",
@@ -63,7 +87,7 @@ class MainLayout extends StatelessWidget {
           ),
         ],
       ),
-      body: SafeArea(child: child),
+      body: SafeArea(child: widget.child),
     );
   }
 }

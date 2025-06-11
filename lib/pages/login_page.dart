@@ -30,7 +30,7 @@ class _LoginPageState extends State<LoginPage> {
 
       setState(() => _loading = false);
 
-      // If signup is successful, navigate to login
+      // If login is successful, navigate to dashboard
       if (result.toLowerCase().contains('success')) {
         Future.delayed(const Duration(milliseconds: 500), () {
           Navigator.pushNamed(context, '/dashboard');
@@ -38,7 +38,6 @@ class _LoginPageState extends State<LoginPage> {
       }
     }
   }
-
   @override
   Widget build(BuildContext context) {
     final deviceHeight = MediaQuery.sizeOf(context).height;

@@ -64,16 +64,15 @@ class ProjectsService {
     String userId,
     String id,
   ) async {
-    final url = Uri.parse('http://10.0.2.2:8000/api/edit-project');
+    final url = Uri.parse('http://10.0.2.2:8000/api/edit-project/$id');
     try {
-      final response = await http.post(
+      final response = await http.put(
         url,
         headers: {
           'Content-Type': 'application/json',
           'Accept': 'application/json',
         },
         body: jsonEncode({
-          'id':id,
           'name': name,
           'description': description,
           'status': status,
