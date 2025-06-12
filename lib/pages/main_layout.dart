@@ -13,6 +13,7 @@ class MainLayout extends StatefulWidget {
 
 class _MainLayoutState extends State<MainLayout> {
   String? email;
+  String? role;
 
   @override
   void initState() {
@@ -21,10 +22,14 @@ class _MainLayoutState extends State<MainLayout> {
   }
 
   Future<void> _loadLoginInfo() async {
-    final storedEmail = await AuthService.getLoginInfo();
-    setState(() {
-      email = storedEmail;
-    });
+    final storedInfo = await AuthService.getLoginInfo();
+
+    if (storedInfo != null) {
+      setState(() {
+        email = storedInfo['email'];
+        role = storedInfo['role'];
+      });
+    }
   }
 
   List<String> get menuItems {
@@ -38,7 +43,15 @@ class _MainLayoutState extends State<MainLayout> {
   void _navigate(BuildContext context, String value) {
     switch (value) {
       case "Home":
-        Navigator.pushNamed(context, '/');
+        if (role == "reporter") {
+          Navigator.pushNamed(context, '/reporter-dashboard');
+        }
+        if (role == 'debugger') {
+          Navigator.pushNamed(context, '/debugger-dashboard');
+        }
+        if (role == 'admin') {
+          Navigator.pushNamed(context, '/admin-dashboard');
+        }
         break;
       case "About":
         Navigator.pushNamed(context, '/about');

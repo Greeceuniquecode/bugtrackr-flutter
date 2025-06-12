@@ -12,7 +12,6 @@ class AuthService {
     String password,
     String address,
     String dob,
-    // File image,
     String gender,
   ) async {
     final url = Uri.parse('http://10.0.2.2:8000/api/register');
@@ -23,7 +22,14 @@ class AuthService {
           'Content-Type': 'application/json',
           'Accept': 'application/json',
         },
-        body: jsonEncode({'name': name, 'email': email, 'password': password, 'address':address,'dob':dob, 'gender':gender}),
+        body: jsonEncode({
+          'name': name,
+          'email': email,
+          'password': password,
+          'address': address,
+          'dob': dob,
+          'gender': gender,
+        }),
       );
 
       final data = jsonDecode(response.body);
@@ -38,7 +44,7 @@ class AuthService {
     }
   }
 
-  static Future<String> login(String email, String password) async {
+  static Future login(String email, String password) async {
     final url = Uri.parse('http://10.0.2.2:8000/api/login');
     try {
       final response = await http.post(
@@ -57,24 +63,36 @@ class AuthService {
       final data = jsonDecode(response.body);
 
       if (response.statusCode == 200) {
-        await _storage.write(key: 'email', value: email);
-        return 'Logged in successfully!';
+        final user = data["user"];
+        await _storage.write(key: 'email', value: user['email']);
+        await _storage.write(key: 'role', value: user['role']);
+        return {'message':'Logged in successfully!','user':user};
       } else {
-        return data['message'] ??
-            'Login failed with status ${response.statusCode}';
+        return {'message':data['message']
+        //  ??
+            // 'message':'Login failed with status ${response.statusCode}';
+     };
       }
     } catch (e) {
       return 'Error during login: ${e.toString()}';
     }
   }
 
-  static Future<String?> getLoginInfo() async {
-    try {
-      return await _storage.read(key: "email");
-    } catch (e) {
-      return null;
+static Future<Map<String, String>?> getLoginInfo() async {
+  try {
+    final email = await _storage.read(key:'email');
+    final role = await _storage.read(key:'role');
+
+    if (email != null && role != null) {
+      return {'email': email, 'role': role};
     }
+
+    return null;
+  } catch (e) {
+    return null;
   }
+}
+
 
   static Future<String> logout() async {
     try {

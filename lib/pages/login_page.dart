@@ -24,16 +24,19 @@ class _LoginPageState extends State<LoginPage> {
         _emailController.text,
         _passwordController.text,
       );
+    final message = result['message'] ?? 'Unknown response';
+    final user = result['user'];
+    final role = user?['role'];
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(result), behavior: SnackBarBehavior.floating),
+        SnackBar(content: Text(message), behavior: SnackBarBehavior.floating),
       );
 
       setState(() => _loading = false);
 
       // If login is successful, navigate to dashboard
-      if (result.toLowerCase().contains('success')) {
+      if (message.toLowerCase().contains('success')) {
         Future.delayed(const Duration(milliseconds: 500), () {
-          Navigator.pushNamed(context, '/dashboard');
+          Navigator.pushNamed(context, '/$role-dashboard');
         });
       }
     }
