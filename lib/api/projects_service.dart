@@ -1,13 +1,23 @@
 import 'dart:convert';
+import 'package:complimentsjar/api/auth_service.dart';
 import 'package:http/http.dart' as http;
 
 class ProjectsService {
+  static String? userId;
   static Future<String> createProject(
     String name,
     String description,
     String status,
-    String userId,
   ) async {
+    Future<void> loadLoginInfo() async {
+      final storedInfo = await AuthService.getLoginInfo();
+
+      if (storedInfo != null) {
+        userId = storedInfo['user_id'];
+      }
+    }
+
+    loadLoginInfo();
     final url = Uri.parse('http://10.0.2.2:8000/api/create-project');
     try {
       final response = await http.post(
@@ -25,7 +35,6 @@ class ProjectsService {
       );
 
       final data = jsonDecode(response.body);
-
       if (response.statusCode == 200) {
         return 'Project Created successfully!';
       } else {
@@ -57,12 +66,13 @@ class ProjectsService {
       return 'Error: $e';
     }
   }
+
   static Future<String> editProject(
     String name,
     String description,
     String status,
     String userId,
-    String id,
+    int id,
   ) async {
     final url = Uri.parse('http://10.0.2.2:8000/api/edit-project/$id');
     try {
@@ -91,5 +101,4 @@ class ProjectsService {
       return 'Error: $e';
     }
   }
-
 }

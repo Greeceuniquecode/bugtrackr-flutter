@@ -14,9 +14,7 @@ class _RegisterBugPageState extends State<RegisterBugPage> {
   final _titleController = TextEditingController();
   final _descriptionController = TextEditingController();
   final _codeController = TextEditingController();
-  final _userIdController = TextEditingController();
   final _statusController =TextEditingController();
-  final _projectIdController = TextEditingController();
   bool _loading = false;
 
 void _registerBug() async {
@@ -28,20 +26,21 @@ void _registerBug() async {
       _titleController.text,
       _codeController.text,
       _descriptionController.text,
-      _userIdController.text,
-      project['id'].toString(),
+      project['id'],
       _statusController.text,
     );
+    setState(() => _loading = false);
+
+    if (result.toLowerCase().contains('success')) {
 
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(content: Text(result.toString()), behavior: SnackBarBehavior.floating),
     );
-
-    setState(() => _loading = false);
-
+    
     Future.delayed(const Duration(seconds: 5), () {
-      Navigator.pushNamed(context, '/projects');
+      Navigator.pushNamed(context, '/reporter-projects');
     });
+    }
   }
 }
 
@@ -116,20 +115,6 @@ void _registerBug() async {
                   ),
                 ),
               ),
-              TextFormField(
-                controller: _userIdController,
-                decoration: const InputDecoration(
-                  labelText: "User Id",
-                  border: OutlineInputBorder(),
-                ),
-              ),
-              //               TextFormField(
-              //   controller: _projectIdController,
-              //   decoration: const InputDecoration(
-              //     labelText: "Project Id",
-              //     border: OutlineInputBorder(),
-              //   ),
-              // ),
               const SizedBox(height: 6),
               SizedBox(
                 width: double.infinity,

@@ -36,12 +36,6 @@ class _BugEditPageState extends State<BugEditPage> {
       _codeController = TextEditingController(text: bug!['code']);
       _descriptionController = TextEditingController(text: bug!['description']);
       _statusController = TextEditingController(text: bug!['status']);
-      _userIdController = TextEditingController(
-        text: bug!['user_id'].toString(),
-      );
-      _projectIdController = TextEditingController(
-        text: bug!['project_id'].toString(),
-      );
 
       dropdownKey = ValueKey(bug!['status']);
     }
@@ -67,16 +61,17 @@ class _BugEditPageState extends State<BugEditPage> {
         _codeController.text,
         _descriptionController.text,
         _statusController.text,
-        bug!['user_id'],
         bug!['project_id'],
         bug!['id'],
       );
 
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(result), behavior: SnackBarBehavior.floating),
-      );
-
       setState(() => _loading = false);
+      if (result.toLowerCase().contains("success")) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(result), behavior: SnackBarBehavior.floating),
+        );
+        Navigator.pushNamed(context, '/bug-details', arguments: bug);
+      }
     }
   }
 

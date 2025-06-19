@@ -2,14 +2,14 @@ import 'package:complimentsjar/api/projects_service.dart';
 import 'package:complimentsjar/pages/main_layout.dart';
 import 'package:flutter/material.dart';
 
-class ProjectPage extends StatefulWidget {
-  const ProjectPage({super.key});
+class DebuggerProjectPage extends StatefulWidget {
+  const DebuggerProjectPage({super.key});
 
   @override
-  State<ProjectPage> createState() => _ProjectPageState();
+  State<DebuggerProjectPage> createState() => _DebuggerProjectPageState();
 }
 
-class _ProjectPageState extends State<ProjectPage> {
+class _DebuggerProjectPageState extends State<DebuggerProjectPage> {
   List<Map<String, dynamic>> _projects = [];
   bool _loading = false;
 
@@ -61,22 +61,6 @@ class _ProjectPageState extends State<ProjectPage> {
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.green,
-                  ),
-
-                  onPressed: () {
-                    Navigator.pushNamed(context, '/create-project');
-                  },
-                  child: const Text(
-                    "Create Project",
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
               ],
             ),
             //card
@@ -111,7 +95,7 @@ class _ProjectPageState extends State<ProjectPage> {
                                     onPressed: () {
                                       Navigator.pushNamed(
                                         context,
-                                        '/project-details',
+                                        '/debugger-project-details',
                                         arguments: project,
                                       );
                                     },
@@ -121,26 +105,6 @@ class _ProjectPageState extends State<ProjectPage> {
                                         fontSize: 18,
                                         fontWeight: FontWeight.bold,
                                         color: Colors.white,
-                                      ),
-                                    ),
-                                  ),
-                                  ElevatedButton(
-
-                                    style: ElevatedButton.styleFrom(
-                                      padding:
-                                          EdgeInsets.zero, 
-                                    ),
-                                    onPressed: () {
-                                      Navigator.pushNamed(
-                                        context,
-                                        '/edit-project',
-                                        arguments: project,
-                                      );
-                                    },
-                                    child: Text(
-                                      'Edit',
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.bold,
                                       ),
                                     ),
                                   ),

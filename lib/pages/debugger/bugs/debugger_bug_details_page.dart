@@ -2,8 +2,8 @@ import "package:complimentsjar/pages/main_layout.dart";
 import "package:flutter/material.dart";
 import "package:flutter/services.dart";
 
-class BugDetailsPage extends StatelessWidget {
-  const BugDetailsPage({super.key});
+class DebuggerBugDetailsPage extends StatelessWidget {
+  const DebuggerBugDetailsPage({super.key});
 
   Color _getStatusColor(String status) {
     switch (status.toLowerCase()) {
@@ -166,24 +166,66 @@ class BugDetailsPage extends StatelessWidget {
                             ),
                           ),
                         ),
+                        const SizedBox(height: 8),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
+                              children: [
+                                Icon(
+                                  Icons.code,
+                                  size: 16,
+                                  color: Colors.grey[600],
+                                ),
+                                const SizedBox(width: 8),
+                                Text(
+                                  'Fixed Code:',
+                                  style: TextStyle(
+                                    color: Colors.grey[600],
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                                const Spacer(),
+                                GestureDetector(
+                                  onTap:
+                                      () => _copyToClipboard(
+                                        context,
+                                        bug['new_code']?.toString() ?? '',
+                                        'New code',
+                                      ),
+                                  child: Icon(
+                                    Icons.copy,
+                                    size: 16,
+                                    color: Colors.grey[500],
+                                  ),
+                                ),
+                              ],
+                            ),
+                            const SizedBox(height: 8),
+                            Container(
+                              width: double.infinity,
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 12,
+                                vertical: 8,
+                              ),
+                              decoration: BoxDecoration(
+                                color: Colors.grey[100],
+                                borderRadius: BorderRadius.circular(6),
+                                border: Border.all(color: Colors.grey[300]!),
+                              ),
+                              child: SelectableText(
+                                bug['new_code']?.toString() ?? 'N/A',
+                                style: const TextStyle(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w500,
+                                  fontFamily: 'monospace',
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
                       ],
                     ),
-                    const SizedBox(height: 6),
-                  ],
-                ),
-              ),
-            ),
-            Card(
-              elevation: 2,
-              child: Padding(
-                padding: const EdgeInsets.all(6.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text('Code Available'),
-                    OutlinedButton.icon(
-                      label: Text('View Code') ,
-                      onPressed: () {Navigator.pushNamed(context, '/check-debugged-code', arguments: bug);},) ,
                   ],
                 ),
               ),
@@ -235,7 +277,7 @@ class BugDetailsPage extends StatelessWidget {
               ),
             ),
 
-            const SizedBox(height: 24),
+            const SizedBox(height: 16),
 
             // Action buttons
             Row(
@@ -252,20 +294,24 @@ class BugDetailsPage extends StatelessWidget {
                     ),
                   ),
                 ),
-                const SizedBox(width: 12),
-                Expanded(
-                  child: OutlinedButton.icon(
-                    onPressed: () {
-                      // Add edit functionality
-                      Navigator.pushNamed(context, '/edit-bug', arguments: bug);
-                    },
-                    icon: const Icon(Icons.edit),
-                    label: const Text('Edit Bug'),
-                    style: OutlinedButton.styleFrom(
-                      padding: const EdgeInsets.symmetric(vertical: 12),
+                if (bug['status'] != "Completed") ...[
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: ElevatedButton.icon(
+                      onPressed: () {
+                        Navigator.pushNamed(
+                          context,
+                          '/bug-submission-page',
+                          arguments: bug,
+                        );
+                      },
+                      label: const Text('Fix Bug'),
+                      style: ElevatedButton.styleFrom(
+                        padding: const EdgeInsets.symmetric(vertical: 12),
+                      ),
                     ),
                   ),
-                ),
+                ],
               ],
             ),
           ],

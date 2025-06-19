@@ -68,7 +68,12 @@ class _MainLayoutState extends State<MainLayout> {
         Navigator.pushNamed(context, '/signup');
         break;
       case "Projects":
-        Navigator.pushNamed(context, '/projects');
+      if (role == "debugger") {
+        Navigator.pushNamed(context, '/debugger-projects');
+      }
+      if (role == "reporter") {
+        Navigator.pushNamed(context, '/reporter-projects');
+      }
         break;
       case "Logout":
         Navigator.pushNamed(context, '/logout');

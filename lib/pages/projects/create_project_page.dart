@@ -15,7 +15,6 @@ class _CreateProjectPageState extends State<CreateProjectPage> {
   final _nameController = TextEditingController();
   final _descriptionController = TextEditingController();
   final _statusController = TextEditingController();
-  final _userIdController = TextEditingController();
   bool _loading = false;
 
   void _createProject() async {
@@ -25,7 +24,6 @@ class _CreateProjectPageState extends State<CreateProjectPage> {
         _nameController.text,
         _descriptionController.text,
         _statusController.text,
-        _userIdController.text,
       );
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text(result), behavior: SnackBarBehavior.floating),
@@ -34,10 +32,11 @@ class _CreateProjectPageState extends State<CreateProjectPage> {
       setState(() => _loading = false);
 
       // If signup is successful, navigate to login
-      // if (result.toLowerCase().contains('success')) {
-      Future.delayed(const Duration(milliseconds: 5000), () {
-        Navigator.pushNamed(context, '/projects');
-      });
+      if (result.toLowerCase().contains('success')) {
+        Future.delayed(const Duration(milliseconds: 500), () {
+          Navigator.pushNamed(context, '/reporter-projects');
+        });
+      }
     }
   }
 
@@ -81,14 +80,6 @@ class _CreateProjectPageState extends State<CreateProjectPage> {
                 keyboardType: TextInputType.text,
                 validator:
                     (value) => value!.isEmpty ? 'Description required' : null,
-              ),
-              TextFormField(
-                controller: _userIdController,
-                decoration: const InputDecoration(
-                  labelText: "User Id",
-                  border: OutlineInputBorder(),
-                ),
-                validator: null,
               ),
               InputDecorator(
                 decoration: InputDecoration(

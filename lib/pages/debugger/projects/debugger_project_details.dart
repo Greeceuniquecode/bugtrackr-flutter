@@ -1,9 +1,10 @@
+import 'package:complimentsjar/pages/debugger/bugs/debugger_bugs_page.dart';
 import 'package:complimentsjar/pages/main_layout.dart';
 import 'package:complimentsjar/pages/bugs/bugs_page.dart';
 import 'package:flutter/material.dart';
 
-class ProjectDetailsPage extends StatelessWidget {
-  const ProjectDetailsPage({super.key});
+class DebuggerProjectDetails extends StatelessWidget {
+  const DebuggerProjectDetails({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -62,16 +63,6 @@ class ProjectDetailsPage extends StatelessWidget {
                   'Bugs',
                   style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                 ),
-                ElevatedButton(
-                  onPressed: () {
-                    Navigator.pushNamed(
-                      context,
-                      '/register-bug',
-                      arguments: project,
-                    );
-                  },
-                  child: const Text('Register Bug'),
-                ),
               ],
             ),
           ),
@@ -79,7 +70,7 @@ class ProjectDetailsPage extends StatelessWidget {
           Expanded(
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 12),
-              child: BugsPage(project['id']),
+              child: DebuggerBugsPage(project['id']),
             ),
           ),
         ],

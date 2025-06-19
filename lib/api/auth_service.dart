@@ -66,33 +66,35 @@ class AuthService {
         final user = data["user"];
         await _storage.write(key: 'email', value: user['email']);
         await _storage.write(key: 'role', value: user['role']);
-        return {'message':'Logged in successfully!','user':user};
+        await _storage.write(key: 'user_id', value: user['id'].toString());
+        return {'message': 'Logged in successfully!', 'user': user};
       } else {
-        return {'message':data['message']
-        //  ??
-            // 'message':'Login failed with status ${response.statusCode}';
-     };
+        return {
+          'message': data['message'],
+          //  ??
+          // 'message':'Login failed with status ${response.statusCode}';
+        };
       }
     } catch (e) {
       return 'Error during login: ${e.toString()}';
     }
   }
 
-static Future<Map<String, String>?> getLoginInfo() async {
-  try {
-    final email = await _storage.read(key:'email');
-    final role = await _storage.read(key:'role');
+  static Future<Map<String, String>?> getLoginInfo() async {
+    try {
+      final email = await _storage.read(key: 'email');
+      final role = await _storage.read(key: 'role');
+      final userId = await _storage.read(key: 'user_id');
 
-    if (email != null && role != null) {
-      return {'email': email, 'role': role};
+      if (email != null && role != null && userId != null) {
+        return {'email': email, 'role': role, 'user_id': userId};
+      }
+
+      return null;
+    } catch (e) {
+      return null;
     }
-
-    return null;
-  } catch (e) {
-    return null;
   }
-}
-
 
   static Future<String> logout() async {
     try {

@@ -60,11 +60,13 @@ class _EditProjectPageState extends State<EditProjectPage> {
         project!['id'],
       );
 
-      ScaffoldMessenger.of(context).showSnackBar(
+      setState(() => _loading = false);
+      if (result.toLowerCase().contains("success")){
+        ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text(result), behavior: SnackBarBehavior.floating),
       );
-
-      setState(() => _loading = false);
+      Navigator.pushNamed(context, '/project-details', arguments: project);
+      }
     }
   }
 
